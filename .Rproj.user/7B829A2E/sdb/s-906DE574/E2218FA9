@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "rm(list=ls())\nlimma.output <- read.csv(\n  './data/limma-output.csv',\n  stringsAsFactors = FALSE\n)",
+    "created" : 1553686701259.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "910394230",
+    "id" : "E2218FA9",
+    "lastKnownWriteTime" : 1553687192,
+    "last_content_update" : 1553687192811,
+    "path" : "~/Documents/office/extra-help/parul/enrichDE/02-volcano-plot.R",
+    "project_path" : "02-volcano-plot.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

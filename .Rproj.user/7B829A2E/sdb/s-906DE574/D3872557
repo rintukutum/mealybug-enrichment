@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "rm(list=ls())\ndir.create('./data',showWarnings = FALSE)\ndownGO <- read.csv(\n  './data/downregulated-ortho-GO.csv',\n  stringsAsFactors = FALSE\n)\n######### remove NA and nothing\nidx.rm <- grep('N/A',downGO$GO.Annotation)\ndownGO.ok <- downGO[-idx.rm,]\nidx.rm <- which(nchar(downGO.ok$GO.Annotation) == 0)\ndownGO.ok <- downGO.ok[-idx.rm,]\n########\nsource('./funcs-room.R')\ndownGO.forward <- list()\nfor(i in 1:nrow(downGO.ok)){\n  downGO.forward[[i]] <- getGO(x = downGO.ok$GO.Annotation[i])\n}\nnames(downGO.forward) <- downGO.ok$ids\ndownGO.final <- plyr::ldply(\n  downGO.forward\n)\n####\ntb_ <- table(downGO.final$GO.TERM)\nnames(tb_) <- c(\n  'Cellular Component',\n  'Molecular Function',\n  'Biological Process'\n)\norg.mar <- par()$mar\nmod.mar <- c(5.1,12.1,4.1,2.1)\ndir.create('./figures',showWarnings = FALSE)\npng('./figures/01-downregulated-GO-terms.png',\n    width = 1300,\n    height = 800,\n    res = 200)\npar(mar = mod.mar)\nbp <- barplot(\n  tb_,\n  horiz = TRUE,\n  las = 2,\n  col = rev(c('#a05a2cff',\n              '#d38d5fff',\n              '#e9c6afff')),\n  main = 'DOWN-regulated genes statistics on GO terms'\n)\ntext(y = bp[,1],x = 3,labels = tb_,adj = 0,cex = 2,\n     col = rev(c('white','white','black'))\n)\ndev.off()\npar(mar = org.mar)\n######################\ntb_ <- data.frame(table(downGO.final[,c('description','GO.TERM')]))\nidx.rm <- which(tb_$Freq == 0)\ntb_ <- tb_[-idx.rm,]\n\ndf_ <- tb_[tb_$Freq >= 3,]\nlibrary(ggplot2)\np <- ggplot(\n  df_,\n  aes(x = GO.TERM, y = description)\n) +\n  geom_tile(aes(fill=Freq)) + \n  scale_fill_gradient(\n    low = '#ffaaaaff',\n    high = '#d40000ff'\n  ) +\n  scale_x_discrete(\n    labels = c(\n      'Cellular Component',\n      'Molecular Function',\n      'Biological Process'\n    )\n  ) +\n  ggtitle('Down-regulated\\nGO processes') +\n  theme(axis.text.x = element_text(angle=45,hjust = 1))\npng('./figures/01-downregulated-GO-processes.png',\n    width = 800,\n    height = 1400,\n    res = 200)\np\ndev.off()\n\nwrite.csv(\n  downGO.final,\n  file = './data/down-GO-final.csv',\n  row.names = FALSE\n)",
+    "created" : 1553685446076.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1870308819",
+    "id" : "D3872557",
+    "lastKnownWriteTime" : 1553686075,
+    "last_content_update" : 1553686075711,
+    "path" : "~/Documents/office/extra-help/parul/enrichDE/01-enrichment-downregulated.R",
+    "project_path" : "01-enrichment-downregulated.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

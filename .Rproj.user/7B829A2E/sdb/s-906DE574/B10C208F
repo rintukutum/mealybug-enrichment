@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "rm(list=ls())\ndir.create('./data',showWarnings = FALSE)\nupGO <- read.csv(\n  './data/upregulated-ortho-GO.csv',\n  stringsAsFactors = FALSE\n)\n######### remove NA and nothing\nidx.rm <- grep('N/A',upGO$GO.Annotation)\nupGO.ok <- upGO[-idx.rm,]\nidx.rm <- which(nchar(upGO.ok$GO.Annotation) == 0)\nupGO.ok <- upGO.ok[-idx.rm,]\n########\nsource('./funcs-room.R')\nupGO.forward <- list()\nfor(i in 1:nrow(upGO.ok)){\n  upGO.forward[[i]] <- getGO(x = upGO.ok$GO.Annotation[i])\n}\nnames(upGO.forward) <- upGO.ok$ids\nupGO.final <- plyr::ldply(\n  upGO.forward\n)\n####\ntb_ <- table(upGO.final$GO.TERM)\nnames(tb_) <- c(\n  'Cellular Component',\n  'Molecular Function',\n  'Biological Process'\n)\norg.mar <- par()$mar\nmod.mar <- c(5.1,12.1,4.1,2.1)\ndir.create('./figures',showWarnings = FALSE)\npng('./figures/00-upregulated-GO-terms.png',\n    width = 1250,\n    height = 800,\n    res = 200)\npar(mar = mod.mar)\nbp <- barplot(\n  tb_,\n  horiz = TRUE,\n  las = 2,\n  col = rev(c('#a05a2cff',\n          '#d38d5fff',\n          '#e9c6afff')),\n  main = 'UP-regulated genes statistics on GO terms'\n)\ntext(y = bp[,1],x = 3,labels = tb_,adj = 0,cex = 2,\n     col = rev(c('white','white','black'))\n    )\ndev.off()\npar(mar = org.mar)\n#################\ntb_ <- data.frame(table(upGO.final[,c('description','GO.TERM')]))\nidx.rm <- which(tb_$Freq == 0)\ntb_ <- tb_[-idx.rm,]\n\ndf_ <- tb_[tb_$Freq >= 3,]\nlibrary(ggplot2)\np <- ggplot(\n  df_,\n  aes(x = GO.TERM, y = description)\n) +\n  geom_tile(aes(fill=Freq)) + \n  scale_fill_gradient(\n  low = '#afe9c6ff',\n  high = '#217844ff'\n) +\n  scale_x_discrete(\n    labels = c(\n      'Cellular Component',\n      'Molecular Function',\n      'Biological Process'\n    )\n  ) +\n  ggtitle('Up-regulated\\nGO processes') +\n  theme(axis.text.x = element_text(angle=45,hjust = 1))\npng('./figures/00-upregulated-GO-processes.png',\n    width = 1200,\n    height = 1400,\n    res = 200)\np\ndev.off()\n\nwrite.csv(\n  upGO.final,\n  file = './data/up-GO-final.csv',\n  row.names = FALSE\n)",
+    "created" : 1553682001806.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4150068346",
+    "id" : "B10C208F",
+    "lastKnownWriteTime" : 1553685820,
+    "last_content_update" : 1553685820885,
+    "path" : "~/Documents/office/extra-help/parul/enrichDE/00-enrichment-upregulated.R",
+    "project_path" : "00-enrichment-upregulated.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

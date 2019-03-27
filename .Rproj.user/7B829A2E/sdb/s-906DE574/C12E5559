@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "getGO <- function(x){\n  out <- strsplit(\n    x,\n    #upGO$GO.Annotation[1],\n    split = '; '\n  )[[1]]\n  idxGO <- grep('^GO',out)\n  listGO <- list()\n  for(i in 1:length(idxGO)){\n    begin <- idxGO[i]\n    if(i != length(idxGO)){\n      end <- idxGO[i+1]-1\n    }else{\n      end <- length(out)\n    }\n    OUT <- out[begin:end]\n    dfOUT <- data.frame(\n      matrix(data = NA,nrow = 1,ncol = 4),\n      stringsAsFactors = FALSE\n    )\n    colnames(dfOUT) <- c('GO.ID','GO.TERM','description','source')\n    dfOUT$GO.ID <- OUT[1]\n    dfOUT$GO.TERM <- strsplit(OUT[2],split = '\\\\:')[[1]][1]\n    dfOUT$description <- strsplit(OUT[2],split = '\\\\:')[[1]][2]\n    dfOUT$source <- OUT[3]\n    listGO[[i]] <- dfOUT\n  }\n  outDF <- plyr::ldply(\n    listGO\n  )\n  return(outDF)\n}\n",
+    "created" : 1553685689201.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1740399678",
+    "id" : "C12E5559",
+    "lastKnownWriteTime" : 1553685695,
+    "last_content_update" : 1553685695113,
+    "path" : "~/Documents/office/extra-help/parul/enrichDE/funcs-room.R",
+    "project_path" : "funcs-room.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

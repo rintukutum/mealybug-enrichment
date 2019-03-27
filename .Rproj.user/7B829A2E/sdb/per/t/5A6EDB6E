@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "rm(list=ls())\nlimma.output <- read.csv(\n  './data/limma-output.csv',\n  stringsAsFactors = FALSE\n)\nlibrary(ggplot2)\nidx <- abs(limma.output$logFC) <= 975\ntable(idx)\np_ <- limma.output[idx,]\nsig_ <- p_$adj.P.Val < 0.1 \ncols <- ifelse(\n  sig_,yes = '#c8373764',no = '#80808032'\n)\np <- ggplot(\n  p_,\n  aes(\n    x = logFC,\n    y = -log10(P.Value)\n  )\n) +\n  geom_point(col=cols)\np\n\nidx <- abs(limma.output$logFC) <= 10\ntable(idx)\np_ <- limma.output[idx,]\nsig_ <- p_$adj.P.Val < 0.1 \ncols <- ifelse(\n  sig_,yes = '#c8373764',no = '#80808032'\n)\np__ <- ggplot(\n  p_,\n  aes(\n    x = logFC,\n    y = -log10(P.Value)\n  )\n) +\n  geom_point(col=cols)\np__\n\n\npng('./figures/02-volcano-major.png',\n    width = 1000,\n    height = 1000,\n    res = 200)\np + ggtitle('Differential expression between \\nMale vs Female (Male/Female)')\ndev.off()\npng('./figures/02-volcano-minor.png',\n    width = 1000,\n    height = 1000,\n    res = 200) \np__ + ggtitle('Differential expression between \\nMale vs Female (Male/Female)')\ndev.off()",
+    "created" : 1553687291888.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "310136843",
+    "id" : "5A6EDB6E",
+    "lastKnownWriteTime" : 1553688204,
+    "last_content_update" : 1553688204488,
+    "path" : "~/Documents/office/extra-help/parul/enrichDE/02-volcano-plot.R",
+    "project_path" : "02-volcano-plot.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
